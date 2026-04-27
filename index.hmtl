@@ -1,0 +1,45 @@
+cat > index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LUNA</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <span class="logo">LUNA</span>
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Browse</a>
+        <a href="#">Community</a>
+        <button class="btn-login" id="btn-login">Sign In</button>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <h1>Watch. Share. Connect.</h1>
+      <p>Your personal streaming community — powered by the night.</p>
+      <button class="btn-primary" id="test-api">Test Connection</button>
+      <div id="api-result"></div>
+    </section>
+
+    <section class="grid-section">
+      <h2>Trending Now</h2>
+      <div class="card-grid">
+        <div class="card"><div class="thumb"></div><p>Video Title 1</p></div>
+        <div class="card"><div class="thumb"></div><p>Video Title 2</p></div>
+        <div class="card"><div class="thumb"></div><p>Video Title 3</p></div>
+        <div class="card"><div class="thumb"></div><p>Video Title 4</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <p>LUNA &copy; 2026 &mdash; CSC 445 Project &mdash; Julianna, Cyrus, Marcello</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+EOF
