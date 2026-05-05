@@ -13,11 +13,12 @@
     .nav-links{display:flex;gap:1.5rem;align-items:center}
     .nav-links a{color:var(--muted);text-decoration:none}
     .nav-links a:hover{color:var(--text)}
-    .wrap{max-width:860px;margin:0 auto;padding:2rem 1.25rem}
+    .wrap{max-width:860px;margin:2rem auto;padding:0 1.25rem}
     h2{margin-bottom:1.25rem;font-size:1.6rem}
-    video{width:100%;border-radius:12px;background:#000;max-height:480px}
-    .error{color:#f87171;margin-top:1rem}
-    .loading{color:var(--muted);margin-top:1rem}
+    video{width:100%;border-radius:12px;background:#000;display:block}
+    .msg{margin-top:1rem;font-size:0.95rem}
+    .error{color:#f87171}
+    .loading{color:var(--muted)}
     footer{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem;border-top:1px solid rgba(168,85,247,0.1);margin-top:3rem}
   </style>
 </head>
@@ -26,14 +27,12 @@
     <span class="logo">LUNA</span>
     <div class="nav-links">
       <a href="index.html">Home</a>
-      <a href="login.html">Sign In</a>
     </div>
   </nav>
   <div class="wrap">
     <h2 id="video-title">Loading...</h2>
-    <video id="player" controls></video>
-    <p id="error" class="error" style="display:none"></p>
-    <p id="loading" class="loading">Fetching video...</p>
+    <video id="player" controls playsinline></video>
+    <p id="msg" class="msg loading">Fetching video link...</p>
   </div>
   <footer><p>LUNA &copy; 2026 &mdash; CSC 445 &mdash; Julianna, Cyrus, Marcello</p></footer>
   <script>
@@ -42,30 +41,30 @@
     const key = params.get("key");
     const title = params.get("title");
     const player = document.getElementById("player");
-    const errorEl = document.getElementById("error");
-    const loadingEl = document.getElementById("loading");
+    const msg = document.getElementById("msg");
+
     document.getElementById("video-title").textContent = title ? decodeURIComponent(title) : "Video";
+
     if (!key) {
-      loadingEl.style.display = "none";
-      errorEl.style.display = "block";
-      errorEl.textContent = "No video selected. Go back and click a video.";
+      msg.className = "msg error";
+      msg.textContent = "No video selected. Go back home and click a video.";
     } else {
       fetch(API + "/video-url?key=" + encodeURIComponent(key))
-        .then(r => r.json())
-        .then(data => {
-          loadingEl.style.display = "none";
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          msg.textContent = "";
           if (data.url) {
-            player.src = data.url;
+            player.setAttribute("src", data.url);
             player.load();
+            player.play().catch(function(){});
           } else {
-            errorEl.style.display = "block";
-            errorEl.textContent = "Could not get video URL.";
+            msg.className = "msg error";
+            msg.textContent = "Could not get video link.";
           }
         })
-        .catch(e => {
-          loadingEl.style.display = "none";
-          errorEl.style.display = "block";
-          errorEl.textContent = "Failed: " + e.message;
+        .catch(function(e){
+          msg.className = "msg error";
+          msg.textContent = "Error: " + e.message;
         });
     }
   </script>
