@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>LUNA — Watch</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <nav class="navbar">
+    <span class="logo">LUNA</span>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="login.html">Sign In</a>
+    </div>
+  </nav>
+  <div class="wrap" style="max-width:860px;margin:0 auto;padding:2rem 1.25rem">
+    <h2 id="video-title" style="margin-bottom:1.25rem;font-size:1.6rem">Loading...</h2>
+    <video id="player" controls style="width:100%;border-radius:12px;background:#000;max-height:480px"></video>
+    <p id="error" style="color:#f87171;margin-top:1rem;display:none"></p>
+    <p id="loading" style="color:#9a8fb8;margin-top:1rem">Fetching video...</p>
+  </div>
+  <footer><p>LUNA &copy; 2026 &mdash; CSC 445 &mdash; Julianna, Cyrus, Marcello</p></footer>
+  <script>
+    const API = "https://2xf2izsgwg.execute-api.us-east-2.amazonaws.com";
+    const params = new URLSearchParams(window.location.search);
+    const key = params.get("key");
+    const title = params.get("title");
+
+    const player = document.getElementById("player");
+    const errorEl = document.getElementById("error");
+    const loadingEl = document.getElementById("loading");
+
+    document.getElementById("video-title").textContent = title ? decodeURIComponent(title) : "Video";
+
+    if (!key) {
+      loadingEl.style.display = "none";
+      errorEl.style.display = "block";
+      errorEl.textContent = "No video key provided. Go back and click a video.";
+    } else {
+      fetch(API + "/video-url?key=" + encodeURIComponent(key))
+        .then(r => r.json())
+        .then(data => {
+          loadingEl.style.display = "none";
+          if (data.url) {
+            player.src = data.url;
+            player.load();
+          } else {
+            errorEl.style.display = "block";
+            errorEl.textContent = "Could not get video URL.";
+          }
+        })
+        .catch(e => {
+          loadingEl.style.display = "none";
+          errorEl.style.display = "block";
+          errorEl.textContent = "Failed to load video: " + e.message;
+        });
+    }
+  </script>
+</body>
+</html>
