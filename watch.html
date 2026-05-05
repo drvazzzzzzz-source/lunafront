@@ -4,7 +4,22 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>LUNA — Watch</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    :root{--bg:#0d0b12;--surface:#161222;--accent:#a855f7;--text:#e8e4f0;--muted:#9a8fb8}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text)}
+    .navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:rgba(22,18,34,0.95);border-bottom:1px solid rgba(168,85,247,0.2)}
+    .logo{font-size:1.5rem;font-weight:800;letter-spacing:.15em;color:var(--accent)}
+    .nav-links{display:flex;gap:1.5rem;align-items:center}
+    .nav-links a{color:var(--muted);text-decoration:none}
+    .nav-links a:hover{color:var(--text)}
+    .wrap{max-width:860px;margin:0 auto;padding:2rem 1.25rem}
+    h2{margin-bottom:1.25rem;font-size:1.6rem}
+    video{width:100%;border-radius:12px;background:#000;max-height:480px}
+    .error{color:#f87171;margin-top:1rem}
+    .loading{color:var(--muted);margin-top:1rem}
+    footer{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem;border-top:1px solid rgba(168,85,247,0.1);margin-top:3rem}
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -14,11 +29,11 @@
       <a href="login.html">Sign In</a>
     </div>
   </nav>
-  <div class="wrap" style="max-width:860px;margin:0 auto;padding:2rem 1.25rem">
-    <h2 id="video-title" style="margin-bottom:1.25rem;font-size:1.6rem">Loading...</h2>
-    <video id="player" controls style="width:100%;border-radius:12px;background:#000;max-height:480px"></video>
-    <p id="error" style="color:#f87171;margin-top:1rem;display:none"></p>
-    <p id="loading" style="color:#9a8fb8;margin-top:1rem">Fetching video...</p>
+  <div class="wrap">
+    <h2 id="video-title">Loading...</h2>
+    <video id="player" controls></video>
+    <p id="error" class="error" style="display:none"></p>
+    <p id="loading" class="loading">Fetching video...</p>
   </div>
   <footer><p>LUNA &copy; 2026 &mdash; CSC 445 &mdash; Julianna, Cyrus, Marcello</p></footer>
   <script>
@@ -26,17 +41,14 @@
     const params = new URLSearchParams(window.location.search);
     const key = params.get("key");
     const title = params.get("title");
-
     const player = document.getElementById("player");
     const errorEl = document.getElementById("error");
     const loadingEl = document.getElementById("loading");
-
     document.getElementById("video-title").textContent = title ? decodeURIComponent(title) : "Video";
-
     if (!key) {
       loadingEl.style.display = "none";
       errorEl.style.display = "block";
-      errorEl.textContent = "No video key provided. Go back and click a video.";
+      errorEl.textContent = "No video selected. Go back and click a video.";
     } else {
       fetch(API + "/video-url?key=" + encodeURIComponent(key))
         .then(r => r.json())
@@ -53,7 +65,7 @@
         .catch(e => {
           loadingEl.style.display = "none";
           errorEl.style.display = "block";
-          errorEl.textContent = "Failed to load video: " + e.message;
+          errorEl.textContent = "Failed: " + e.message;
         });
     }
   </script>
