@@ -3,68 +3,50 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>LUNA — Watch</title>
+  <title>LUNA - Watch</title>
   <style>
-    :root{--bg:#0d0b12;--surface:#161222;--accent:#a855f7;--text:#e8e4f0;--muted:#9a8fb8}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text)}
-    .navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:rgba(22,18,34,0.95);border-bottom:1px solid rgba(168,85,247,0.2)}
-    .logo{font-size:1.5rem;font-weight:800;letter-spacing:.15em;color:var(--accent)}
-    .nav-links{display:flex;gap:1.5rem;align-items:center}
-    .nav-links a{color:var(--muted);text-decoration:none}
-    .nav-links a:hover{color:var(--text)}
+    body{font-family:system-ui,sans-serif;background:#0d0b12;color:#e8e4f0}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:#161222;border-bottom:1px solid rgba(168,85,247,0.2)}
+    .logo{font-size:1.5rem;font-weight:800;letter-spacing:.15em;color:#a855f7}
+    nav a{color:#9a8fb8;text-decoration:none;margin-left:1.5rem}
+    nav a:hover{color:#e8e4f0}
     .wrap{max-width:860px;margin:2rem auto;padding:0 1.25rem}
     h2{margin-bottom:1.25rem;font-size:1.6rem}
     video{width:100%;border-radius:12px;background:#000;display:block}
-    .msg{margin-top:1rem;font-size:0.95rem}
-    .error{color:#f87171}
-    .loading{color:var(--muted)}
-    footer{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem;border-top:1px solid rgba(168,85,247,0.1);margin-top:3rem}
+    .msg{margin-top:1rem;font-size:0.95rem;color:#9a8fb8}
+    footer{text-align:center;padding:2rem;color:#9a8fb8;font-size:.85rem;margin-top:3rem;border-top:1px solid rgba(168,85,247,0.1)}
   </style>
 </head>
 <body>
-  <nav class="navbar">
+  <nav>
     <span class="logo">LUNA</span>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-    </div>
+    <div><a href="/index.html">Home</a></div>
   </nav>
   <div class="wrap">
-    <h2 id="video-title">Loading...</h2>
-    <video id="player" controls playsinline></video>
-    <p id="msg" class="msg loading">Fetching video link...</p>
+    <h2 id="ttl">Loading...</h2>
+    <video id="vid" controls playsinline></video>
+    <p id="msg" class="msg">Fetching video...</p>
   </div>
   <footer><p>LUNA &copy; 2026 &mdash; CSC 445 &mdash; Julianna, Cyrus, Marcello</p></footer>
   <script>
-    const API = "https://2xf2izsgwg.execute-api.us-east-2.amazonaws.com";
-    const params = new URLSearchParams(window.location.search);
-    const key = params.get("key");
-    const title = params.get("title");
-    const player = document.getElementById("player");
-    const msg = document.getElementById("msg");
-
-    document.getElementById("video-title").textContent = title ? decodeURIComponent(title) : "Video";
-
+    var API = "https://2xf2izsgwg.execute-api.us-east-2.amazonaws.com";
+    var p = new URLSearchParams(window.location.search);
+    var key = p.get("key");
+    var title = p.get("title");
+    document.getElementById("ttl").textContent = title ? decodeURIComponent(title) : "Video";
     if (!key) {
-      msg.className = "msg error";
-      msg.textContent = "No video selected. Go back home and click a video.";
+      document.getElementById("msg").textContent = "No video selected.";
     } else {
       fetch(API + "/video-url?key=" + encodeURIComponent(key))
         .then(function(r){ return r.json(); })
-        .then(function(data){
-          msg.textContent = "";
-          if (data.url) {
-            player.setAttribute("src", data.url);
-            player.load();
-            player.play().catch(function(){});
-          } else {
-            msg.className = "msg error";
-            msg.textContent = "Could not get video link.";
-          }
+        .then(function(d){
+          document.getElementById("msg").textContent = "";
+          document.getElementById("vid").src = d.url;
+          document.getElementById("vid").load();
         })
         .catch(function(e){
-          msg.className = "msg error";
-          msg.textContent = "Error: " + e.message;
+          document.getElementById("msg").textContent = "Error: " + e.message;
         });
     }
   </script>
