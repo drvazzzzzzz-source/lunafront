@@ -11,7 +11,7 @@
     <span class="logo">LUNA</span>
     <div class="nav-links">
       <a href="index.html">Home</a>
-      <a href="watch.html">Browse</a>
+      <a href="player.html">Browse</a>
       <a href="login.html">Sign In</a>
     </div>
   </nav>
@@ -37,7 +37,7 @@
           return;
         }
         grid.innerHTML = videos.map(v => `
-          <div class="card" onclick="location.href='watch.html?key=${v.s3Key}&title=${encodeURIComponent(v.title)}'">
+          <div class="card" onclick="location.href='player.html?key=${v.s3Key}&title=${encodeURIComponent(v.title)}'">
             <div class="thumb">&#9654;</div>
             <p>${v.title}</p>
           </div>`).join('');
