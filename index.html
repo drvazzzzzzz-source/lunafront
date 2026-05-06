@@ -6,45 +6,55 @@
   <title>LUNA — Stream the Night</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:system-ui,sans-serif;background:#0d0b12;color:#e8e4f0;min-height:100vh}
+    body{font-family:system-ui,sans-serif;background:#0d0b12;color:#e8e4f0;min-height:100vh;display:flex;flex-direction:column}
     nav{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 2.5rem;background:linear-gradient(180deg,rgba(13,11,18,0.98),transparent);position:fixed;top:0;width:100%;z-index:100}
     .logo{font-size:1.8rem;font-weight:900;letter-spacing:.18em;color:#a855f7;text-shadow:0 0 20px rgba(168,85,247,0.5)}
     .nav-links{display:flex;gap:2rem;align-items:center}
-    .nav-links a{color:#ccc;text-decoration:none;font-size:.95rem;transition:color .2s}
+    .nav-links a{color:#ccc;text-decoration:none;font-size:.95rem}
     .nav-links a:hover{color:#fff}
     .btn-signin{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;padding:.45rem 1.2rem;border-radius:6px;cursor:pointer;font-weight:600;font-size:.9rem;text-decoration:none}
-    .hero{height:85vh;display:flex;align-items:flex-end;padding:0 2.5rem 5rem;background:linear-gradient(135deg,#1a0a2e,#0d0b12 60%),radial-gradient(ellipse 120% 80% at 30% 40%,#3b1d6e,transparent);position:relative;overflow:hidden}
-    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(168,85,247,0.08),transparent)}
+    .hero{height:80vh;display:flex;align-items:flex-end;padding:0 2.5rem 5rem;background:linear-gradient(135deg,#1a0a2e,#0d0b12 60%),radial-gradient(ellipse 120% 80% at 30% 40%,#3b1d6e,transparent);position:relative}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(168,85,247,0.07),transparent)}
     .hero-content{max-width:550px;z-index:1}
     .hero-badge{display:inline-block;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.4);color:#c084fc;padding:.3rem .8rem;border-radius:20px;font-size:.8rem;font-weight:600;letter-spacing:.1em;margin-bottom:1rem}
-    .hero h1{font-size:3.2rem;font-weight:900;line-height:1.1;margin-bottom:1rem;text-shadow:0 2px 20px rgba(0,0,0,0.5)}
-    .hero p{color:#b8a9d4;font-size:1.05rem;line-height:1.6;margin-bottom:2rem;max-width:440px}
+    .hero h1{font-size:3rem;font-weight:900;line-height:1.1;margin-bottom:1rem}
+    .hero p{color:#b8a9d4;font-size:1rem;line-height:1.6;margin-bottom:2rem;max-width:440px}
     .hero-btns{display:flex;gap:1rem}
-    .btn-play{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;padding:.8rem 2rem;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.5rem}
+    .btn-play{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;padding:.8rem 2rem;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer}
     .btn-play:hover{filter:brightness(1.1)}
-    .btn-info{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:.8rem 2rem;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer}
-    .btn-info:hover{background:rgba(255,255,255,0.2)}
-    .section{padding:2rem 2.5rem 3rem}
-    .section-title{font-size:1.2rem;font-weight:700;margin-bottom:1.25rem;color:#e8e4f0;letter-spacing:.02em}
+    .btn-info{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:.8rem 2rem;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer}
+    .btn-info:hover{background:rgba(255,255,255,0.18)}
+    .main{display:flex;flex:1;padding-top:0}
+    .sidebar{width:220px;min-width:220px;padding:2rem 1.5rem;border-right:1px solid rgba(168,85,247,0.12);position:sticky;top:0;height:100vh;overflow-y:auto}
+    .sidebar h3{font-size:.75rem;font-weight:700;letter-spacing:.12em;color:#6b5fa0;text-transform:uppercase;margin-bottom:1rem;margin-top:2rem}
+    .sidebar h3:first-child{margin-top:0}
+    .region-btn{display:flex;align-items:center;gap:.75rem;width:100%;background:none;border:none;color:#9a8fb8;padding:.6rem .75rem;border-radius:8px;cursor:pointer;font-size:.92rem;text-align:left;transition:all .2s;margin-bottom:.25rem}
+    .region-btn:hover{background:rgba(168,85,247,0.1);color:#e8e4f0}
+    .region-btn.active{background:rgba(168,85,247,0.18);color:#c084fc;font-weight:600}
+    .region-flag{font-size:1.2rem}
+    .content{flex:1;padding:2rem 2.5rem;overflow-x:hidden}
+    .section-header{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.25rem;margin-top:2rem}
+    .section-header:first-child{margin-top:0}
+    .section-title{font-size:1.15rem;font-weight:700;color:#e8e4f0}
+    .section-count{font-size:.8rem;color:#6b5fa0}
     .row{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.75rem;scrollbar-width:thin;scrollbar-color:rgba(168,85,247,0.3) transparent}
     .row::-webkit-scrollbar{height:4px}
     .row::-webkit-scrollbar-thumb{background:rgba(168,85,247,0.3);border-radius:2px}
-    .card{flex:0 0 200px;background:#161222;border-radius:10px;overflow:hidden;border:1px solid rgba(168,85,247,0.1);cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative}
+    .card{flex:0 0 185px;background:#161222;border-radius:10px;overflow:hidden;border:1px solid rgba(168,85,247,0.1);cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative}
     .card:hover{transform:scale(1.05);border-color:#a855f7;box-shadow:0 8px 30px rgba(168,85,247,0.25)}
-    .poster{width:100%;height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .poster{width:100%;height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
     .poster-bg{position:absolute;inset:0;background:var(--grad)}
-    .poster-icon{font-size:3rem;z-index:1;margin-bottom:.5rem}
-    .poster-initial{font-size:4rem;font-weight:900;z-index:1;color:rgba(255,255,255,0.15);position:absolute;bottom:-.5rem;right:.5rem;line-height:1}
+    .poster-icon{font-size:2.8rem;z-index:1;margin-bottom:.5rem}
+    .poster-initial{font-size:4rem;font-weight:900;z-index:1;color:rgba(255,255,255,0.1);position:absolute;bottom:-.5rem;right:.5rem;line-height:1}
     .play-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;opacity:0;transition:all .25s;z-index:2}
-    .card:hover .play-overlay{background:rgba(0,0,0,0.4);opacity:1}
-    .play-circle{width:52px;height:52px;border-radius:50%;background:rgba(168,85,247,0.9);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
-    .card-info{padding:.75rem}
-    .card-title{font-size:.88rem;font-weight:600;color:#e8e4f0;margin-bottom:.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .card-meta{font-size:.75rem;color:#7c6fa0;display:flex;gap:.5rem}
-    .badge{background:rgba(168,85,247,0.15);color:#c084fc;padding:.1rem .4rem;border-radius:3px;font-size:.7rem;font-weight:600}
-    footer{text-align:center;padding:2.5rem;color:#4a3f6b;font-size:.8rem;border-top:1px solid rgba(168,85,247,0.08);margin-top:1rem}
-    .skeleton{animation:pulse 1.5s ease-in-out infinite}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .card:hover .play-overlay{background:rgba(0,0,0,0.45);opacity:1}
+    .play-circle{width:48px;height:48px;border-radius:50%;background:rgba(168,85,247,0.9);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+    .card-info{padding:.65rem .75rem}
+    .card-title{font-size:.83rem;font-weight:600;color:#e8e4f0;margin-bottom:.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-meta{font-size:.72rem;color:#7c6fa0;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+    .badge{background:rgba(168,85,247,0.15);color:#c084fc;padding:.1rem .35rem;border-radius:3px;font-size:.68rem;font-weight:600}
+    .empty{color:#4a3f6b;padding:2rem 0;font-size:.95rem}
+    footer{text-align:center;padding:2rem;color:#3a2f5a;font-size:.78rem;border-top:1px solid rgba(168,85,247,0.07)}
   </style>
 </head>
 <body>
@@ -62,20 +72,39 @@
     <div class="hero-content">
       <span class="hero-badge">&#9679; NOW STREAMING</span>
       <h1>Stream the Night with LUNA</h1>
-      <p>Your personal streaming community — curated films, delivered in style. Powered by the night.</p>
+      <p>World cinema, curated for you. Browse by region and discover films from every corner of the globe.</p>
       <div class="hero-btns">
-        <button class="btn-play" onclick="document.querySelector('.row').scrollIntoView({behavior:'smooth'})">&#9654; Browse Films</button>
+        <button class="btn-play" onclick="document.querySelector('.main').scrollIntoView({behavior:'smooth'})">&#9654; Browse Films</button>
         <button class="btn-info">About LUNA</button>
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-title">Featured Films</div>
-    <div class="row" id="grid">
-      <div class="card skeleton" style="opacity:.4"><div class="poster" style="--grad:linear-gradient(135deg,#2a1f45,#1a1030)"></div></div>
-      <div class="card skeleton" style="opacity:.4"><div class="poster" style="--grad:linear-gradient(135deg,#2a1f45,#1a1030)"></div></div>
-      <div class="card skeleton" style="opacity:.4"><div class="poster" style="--grad:linear-gradient(135deg,#2a1f45,#1a1030)"></div></div>
+  <div class="main">
+    <div class="sidebar">
+      <h3>Browse by Region</h3>
+      <button class="region-btn active" data-region="all" onclick="filterRegion(this,'all')">
+        <span class="region-flag">&#127758;</span> All Regions
+      </button>
+      <button class="region-btn" data-region="USA" onclick="filterRegion(this,'USA')">
+        <span class="region-flag">&#127482;&#127480;</span> USA
+      </button>
+      <button class="region-btn" data-region="South America" onclick="filterRegion(this,'South America')">
+        <span class="region-flag">&#127463;&#127479;</span> South America
+      </button>
+      <button class="region-btn" data-region="India" onclick="filterRegion(this,'India')">
+        <span class="region-flag">&#127470;&#127475;</span> India
+      </button>
+      <button class="region-btn" data-region="Asia" onclick="filterRegion(this,'Asia')">
+        <span class="region-flag">&#127471;&#127477;</span> Asia
+      </button>
+      <button class="region-btn" data-region="Europe" onclick="filterRegion(this,'Europe')">
+        <span class="region-flag">&#127466;&#127482;</span> Europe
+      </button>
+    </div>
+
+    <div class="content" id="content">
+      <p style="color:#6b5fa0;padding:2rem 0">Loading films...</p>
     </div>
   </div>
 
@@ -90,41 +119,73 @@
       "linear-gradient(135deg,#0c1a3a,#1d4ed8)",
       "linear-gradient(135deg,#1a0a00,#92400e)",
       "linear-gradient(135deg,#0a1a0a,#166534)",
-      "linear-gradient(135deg,#1a001a,#86198f)"
+      "linear-gradient(135deg,#1a001a,#86198f)",
+      "linear-gradient(135deg,#001a1a,#0f766e)",
+      "linear-gradient(135deg,#1a1500,#a16207)"
     ];
-    var ICONS = ["&#127849;","&#127756;","&#9876;","&#127775;","&#127916;"];
+    var ICONS = ["&#127849;","&#127756;","&#9876;","&#127775;","&#127916;","&#128081;","&#127754;"];
+    var allVideos = [];
+    var currentRegion = "all";
+
+    function makeCard(v, i) {
+      var grad = GRADS[i % GRADS.length];
+      var icon = ICONS[i % ICONS.length];
+      var initial = v.title ? v.title[0].toUpperCase() : "L";
+      var year = v.year || "";
+      var genre = v.genre || "";
+      return '<div class="card" onclick="location.href=\'/player.html?key='+encodeURIComponent(v.s3Key)+'&title='+encodeURIComponent(v.title)+'\'">'
+        +'<div class="poster" style="--grad:'+grad+'">'
+        +'<div class="poster-bg"></div>'
+        +'<div class="poster-icon">'+icon+'</div>'
+        +'<div class="poster-initial">'+initial+'</div>'
+        +'<div class="play-overlay"><div class="play-circle">&#9654;</div></div>'
+        +'</div>'
+        +'<div class="card-info">'
+        +'<div class="card-title">'+v.title+'</div>'
+        +'<div class="card-meta">'+(year?'<span>'+year+'</span>':'')+(genre?'<span class="badge">'+genre+'</span>':'')+'</div>'
+        +'</div></div>';
+    }
+
+    function renderContent(region) {
+      var content = document.getElementById("content");
+      var filtered = region === "all" ? allVideos : allVideos.filter(function(v){ return v.region === region; });
+      if (!filtered.length) {
+        content.innerHTML = '<p class="empty">No films found for this region.</p>';
+        return;
+      }
+      if (region === "all") {
+        var regions = ["USA","South America","India","Asia","Europe"];
+        var html = "";
+        regions.forEach(function(r) {
+          var group = allVideos.filter(function(v){ return v.region === r; });
+          if (!group.length) return;
+          var flags = {"USA":"&#127482;&#127480;","South America":"&#127463;&#127479;","India":"&#127470;&#127475;","Asia":"&#127471;&#127477;","Europe":"&#127466;&#127482;"};
+          html += '<div class="section-header"><span class="section-title">'+(flags[r]||"")+" "+r+'</span><span class="section-count">'+group.length+' films</span></div>';
+          html += '<div class="row">'+group.map(makeCard).join('')+'</div>';
+        });
+        content.innerHTML = html || '<p class="empty">No films yet.</p>';
+      } else {
+        var flags2 = {"USA":"&#127482;&#127480;","South America":"&#127463;&#127479;","India":"&#127470;&#127475;","Asia":"&#127471;&#127477;","Europe":"&#127466;&#127482;"};
+        content.innerHTML = '<div class="section-header"><span class="section-title">'+(flags2[region]||"")+" "+region+'</span><span class="section-count">'+filtered.length+' films</span></div>'
+          +'<div class="row">'+filtered.map(makeCard).join('')+'</div>';
+      }
+    }
+
+    function filterRegion(btn, region) {
+      document.querySelectorAll(".region-btn").forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      currentRegion = region;
+      renderContent(region);
+    }
 
     fetch(API + "/videos")
       .then(function(r){ return r.json(); })
       .then(function(videos){
-        var grid = document.getElementById("grid");
-        if (!videos.length) {
-          grid.innerHTML = '<p style="color:#9a8fb8;padding:1rem">No films yet.</p>';
-          return;
-        }
-        grid.innerHTML = videos.map(function(v, i){
-          var grad = GRADS[i % GRADS.length];
-          var icon = ICONS[i % ICONS.length];
-          var initial = v.title ? v.title[0].toUpperCase() : "L";
-          var genre = v.genre || "";
-          var year = v.year || "";
-          return '<div class="card" onclick="location.href=\'/player.html?key='+encodeURIComponent(v.s3Key)+'&title='+encodeURIComponent(v.title)+'\'">'
-            + '<div class="poster" style="--grad:'+grad+'">'
-            + '<div class="poster-bg"></div>'
-            + '<div class="poster-icon">'+icon+'</div>'
-            + '<div class="poster-initial">'+initial+'</div>'
-            + '<div class="play-overlay"><div class="play-circle">&#9654;</div></div>'
-            + '</div>'
-            + '<div class="card-info">'
-            + '<div class="card-title">'+v.title+'</div>'
-            + '<div class="card-meta">'
-            + (year ? '<span>'+year+'</span>' : '')
-            + (genre ? '<span class="badge">'+genre+'</span>' : '')
-            + '</div></div></div>';
-        }).join('');
+        allVideos = videos;
+        renderContent("all");
       })
       .catch(function(){
-        document.getElementById("grid").innerHTML = '<p style="color:#f87171;padding:1rem">Could not load films.</p>';
+        document.getElementById("content").innerHTML = '<p style="color:#f87171">Could not load films.</p>';
       });
   </script>
 </body>
