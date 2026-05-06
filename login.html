@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>LUNA — Sign In</title>
+  <title>LUNA Sign In</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:system-ui,sans-serif;background:#0d0b12;color:#e8e4f0;min-height:100vh;display:flex;flex-direction:column}
     nav{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 2.5rem;background:rgba(13,11,18,0.98);border-bottom:1px solid rgba(168,85,247,0.15)}
-    .logo{font-size:1.8rem;font-weight:900;letter-spacing:.18em;color:#a855f7;text-shadow:0 0 20px rgba(168,85,247,0.5);text-decoration:none}
+    .logo{font-size:1.8rem;font-weight:900;letter-spacing:.18em;color:#a855f7;text-decoration:none}
     .center{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;background:radial-gradient(ellipse 80% 60% at 50% 0%,#2a1f45,#0d0b12)}
     .box{background:#161222;border:1px solid rgba(168,85,247,0.25);border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
     .box-title{font-size:1.5rem;font-weight:800;margin-bottom:.4rem;text-align:center}
@@ -17,15 +17,13 @@
     .tab{flex:1;border:none;background:none;color:#9a8fb8;padding:.55rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:600;transition:all .2s}
     .tab.active{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
     label{display:block;font-size:.8rem;font-weight:600;color:#9a8fb8;margin-bottom:.4rem;margin-top:1rem;letter-spacing:.05em;text-transform:uppercase}
-    input{width:100%;background:rgba(0,0,0,0.35);border:1px solid rgba(168,85,247,0.25);border-radius:8px;padding:.7rem 1rem;color:#e8e4f0;font-size:.95rem;outline:none;transition:border .2s}
+    input{width:100%;background:rgba(0,0,0,0.35);border:1px solid rgba(168,85,247,0.25);border-radius:8px;padding:.7rem 1rem;color:#e8e4f0;font-size:.95rem;outline:none}
     input:focus{border-color:#a855f7}
-    .btn{width:100%;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;padding:.85rem;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1.5rem;transition:filter .2s}
-    .btn:hover{filter:brightness(1.1)}
+    .btn{width:100%;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;padding:.85rem;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1.5rem}
     .btn:disabled{opacity:.6;cursor:not-allowed}
     .msg{margin-top:1rem;padding:.75rem 1rem;border-radius:8px;font-size:.88rem;text-align:center;display:none}
     .msg.error{background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.3);color:#f87171;display:block}
     .msg.success{background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.3);color:#c084fc;display:block}
-    .verify-section{display:none}
     footer{text-align:center;padding:1.5rem;color:#3a2f5a;font-size:.78rem}
   </style>
 </head>
@@ -33,17 +31,14 @@
   <nav>
     <a href="/index.html" class="logo">LUNA</a>
   </nav>
-
   <div class="center">
     <div class="box">
       <div class="box-title">Welcome to LUNA</div>
-      <div class="box-sub">Sign in to your account or create a new one</div>
-
+      <div class="box-sub">Sign in or create a new account</div>
       <div class="tabs">
         <button class="tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
         <button class="tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
       </div>
-
       <div id="signin-section">
         <label>Email</label>
         <input type="email" id="si-email" placeholder="you@example.com"/>
@@ -52,34 +47,28 @@
         <button class="btn" id="si-btn" onclick="doSignIn()">Sign In</button>
         <div class="msg" id="si-msg"></div>
       </div>
-
       <div id="signup-section" style="display:none">
         <label>Email</label>
         <input type="email" id="su-email" placeholder="you@example.com"/>
         <label>Password</label>
-        <input type="password" id="su-pass" placeholder="Min 8 characters"/>
+        <input type="password" id="su-pass" placeholder="Min 8 chars, 1 number, 1 symbol"/>
         <button class="btn" id="su-btn" onclick="doSignUp()">Create Account</button>
         <div class="msg" id="su-msg"></div>
       </div>
-
-      <div class="verify-section" id="verify-section">
+      <div id="verify-section" style="display:none">
         <label>Verification Code</label>
-        <div style="color:#9a8fb8;font-size:.85rem;margin-bottom:.75rem">Check your email for a 6-digit code from AWS.</div>
+        <div style="color:#9a8fb8;font-size:.85rem;margin-bottom:.75rem">Check your email for a 6-digit code.</div>
         <input type="text" id="v-code" placeholder="123456" maxlength="6"/>
         <button class="btn" onclick="doVerify()">Verify Account</button>
         <div class="msg" id="v-msg"></div>
       </div>
     </div>
   </div>
-
-  <footer><p>LUNA &copy; 2026 &mdash; CSC 445 Software Engineering</p></footer>
-
+  <footer><p>LUNA 2026 CSC 445 Software Engineering</p></footer>
   <script>
-    var REGION = "us-east-2";
     var CLIENT_ID = "5sjo2sptdteijhu42bmc07fmg6";
-    var API_URL = "https://cognito-idp." + REGION + ".amazonaws.com/";
+    var API_URL = "https://cognito-idp.us-east-2.amazonaws.com/";
     var pendingEmail = "";
-
     function switchTab(tab) {
       document.getElementById("signin-section").style.display = tab === "signin" ? "block" : "none";
       document.getElementById("signup-section").style.display = tab === "signup" ? "block" : "none";
@@ -87,102 +76,71 @@
       document.getElementById("tab-signin").classList.toggle("active", tab === "signin");
       document.getElementById("tab-signup").classList.toggle("active", tab === "signup");
     }
-
     function cognitoCall(action, payload) {
       return fetch(API_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-amz-json-1.1",
-          "X-Amz-Target": "AWSCognitoIdentityProviderService." + action
-        },
+        headers: { "Content-Type": "application/x-amz-json-1.1", "X-Amz-Target": "AWSCognitoIdentityProviderService." + action },
         body: JSON.stringify(payload)
-      }).then(function(r){ return r.json(); });
+      }).then(function(r) { return r.json(); });
     }
-
     function showMsg(id, text, type) {
       var el = document.getElementById(id);
       el.textContent = text;
       el.className = "msg " + type;
     }
-
     function doSignIn() {
       var email = document.getElementById("si-email").value.trim();
       var pass = document.getElementById("si-pass").value;
-      if (!email || !pass) { showMsg("si-msg","Please fill in all fields.","error"); return; }
+      if (!email || !pass) { showMsg("si-msg", "Please fill in all fields.", "error"); return; }
       var btn = document.getElementById("si-btn");
       btn.disabled = true; btn.textContent = "Signing in...";
-      cognitoCall("InitiateAuth", {
-        AuthFlow: "USER_PASSWORD_AUTH",
-        ClientId: CLIENT_ID,
-        AuthParameters: { USERNAME: email, PASSWORD: pass }
-      }).then(function(data) {
+      cognitoCall("InitiateAuth", { AuthFlow: "USER_PASSWORD_AUTH", ClientId: CLIENT_ID, AuthParameters: { USERNAME: email, PASSWORD: pass } })
+      .then(function(data) {
         btn.disabled = false; btn.textContent = "Sign In";
         if (data.AuthenticationResult) {
           localStorage.setItem("luna_token", data.AuthenticationResult.IdToken);
           localStorage.setItem("luna_email", email);
-          showMsg("si-msg", "Signed in! Redirecting...", "success");
-          setTimeout(function(){ window.location.href = "/index.html"; }, 1000);
-        } else if (data.__type) {
-          var msg = data.__type === "NotAuthorizedException" ? "Wrong email or password." :
-                    data.__type === "UserNotConfirmedException" ? "Please verify your email first." :
-                    data.message || data.__type;
-          showMsg("si-msg", msg, "error");
+          showMsg("si-msg", "Signed in. Redirecting...", "success");
+          setTimeout(function() { window.location.href = "/index.html"; }, 1000);
+        } else {
+          var m = data.__type === "NotAuthorizedException" ? "Wrong email or password." :
+                  data.__type === "UserNotConfirmedException" ? "Please verify your email first." :
+                  data.message || data.__type;
+          showMsg("si-msg", m, "error");
         }
-      }).catch(function(){ btn.disabled=false; btn.textContent="Sign In"; showMsg("si-msg","Connection error. Try again.","error"); });
+      }).catch(function() { btn.disabled = false; btn.textContent = "Sign In"; showMsg("si-msg", "Connection error.", "error"); });
     }
-
     function doSignUp() {
       var email = document.getElementById("su-email").value.trim();
       var pass = document.getElementById("su-pass").value;
-      if (!email || !pass) { showMsg("su-msg","Please fill in all fields.","error"); return; }
-      if (pass.length < 8) { showMsg("su-msg","Password must be at least 8 characters.","error"); return; }
+      if (!email || !pass) { showMsg("su-msg", "Please fill in all fields.", "error"); return; }
+      if (pass.length < 8) { showMsg("su-msg", "Password must be at least 8 characters.", "error"); return; }
       var btn = document.getElementById("su-btn");
       btn.disabled = true; btn.textContent = "Creating account...";
-      cognitoCall("SignUp", {
-        ClientId: CLIENT_ID,
-        Username: email,
-        Password: pass,
-        UserAttributes: [{ Name: "email", Value: email }]
-      }).then(function(data) {
+      cognitoCall("SignUp", { ClientId: CLIENT_ID, Username: email, Password: pass, UserAttributes: [{ Name: "email", Value: email }] })
+      .then(function(data) {
         btn.disabled = false; btn.textContent = "Create Account";
         if (data.UserSub) {
           pendingEmail = email;
           document.getElementById("signup-section").style.display = "none";
           document.getElementById("verify-section").style.display = "block";
-          showMsg("su-msg","","success");
         } else {
-          var msg = data.__type === "UsernameExistsException" ? "An account with this email already exists." :
-                    data.__type === "InvalidPasswordException" ? "Password too weak. Use letters, numbers and symbols." :
-                    data.message || data.__type;
-          showMsg("su-msg", msg, "error");
+          var m = data.__type === "UsernameExistsException" ? "Account already exists." :
+                  data.__type === "InvalidPasswordException" ? "Password needs uppercase, number and symbol." :
+                  data.message || data.__type;
+          showMsg("su-msg", m, "error");
         }
-      }).catch(function(){ btn.disabled=false; btn.textContent="Create Account"; showMsg("su-msg","Connection error. Try again.","error"); });
+      }).catch(function() { btn.disabled = false; btn.textContent = "Create Account"; showMsg("su-msg", "Connection error.", "error"); });
     }
-
     function doVerify() {
       var code = document.getElementById("v-code").value.trim();
-      if (!code) { showMsg("v-msg","Enter the code from your email.","error"); return; }
-      cognitoCall("ConfirmSignUp", {
-        ClientId: CLIENT_ID,
-        Username: pendingEmail,
-        ConfirmationCode: code
-      }).then(function(data) {
-        if (data.__type) {
-          showMsg("v-msg", data.message || "Invalid code.", "error");
-        } else {
-          showMsg("v-msg","Account verified! You can now sign in.","success");
-          setTimeout(function(){ switchTab("signin"); }, 1500);
-        }
-      }).catch(function(){ showMsg("v-msg","Connection error.","error"); });
+      if (!code) { showMsg("v-msg", "Enter the code from your email.", "error"); return; }
+      cognitoCall("ConfirmSignUp", { ClientId: CLIENT_ID, Username: pendingEmail, ConfirmationCode: code })
+      .then(function(data) {
+        if (data.__type) { showMsg("v-msg", data.message || "Invalid code.", "error"); }
+        else { showMsg("v-msg", "Account verified. You can now sign in.", "success"); setTimeout(function() { switchTab("signin"); }, 1500); }
+      }).catch(function() { showMsg("v-msg", "Connection error.", "error"); });
     }
-
-    document.addEventListener("keydown", function(e){
-      if (e.key === "Enter") {
-        var active = document.getElementById("tab-signin").classList.contains("active");
-        if (active) doSignIn(); else doSignUp();
-      }
-    });
   </script>
 </body>
 </html>
-Wed May  6 14:50:33 UTC 2026
