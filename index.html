@@ -40,9 +40,9 @@
     .row{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.75rem;scrollbar-width:thin;scrollbar-color:rgba(168,85,247,0.3) transparent}
     .row::-webkit-scrollbar{height:4px}
     .row::-webkit-scrollbar-thumb{background:rgba(168,85,247,0.3);border-radius:2px}
-    .card{flex:0 0 185px;background:#161222;border-radius:10px;overflow:hidden;border:1px solid rgba(168,85,247,0.1);cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative}
+    .card{flex:0 0 185px;background:#161222;border-radius:10px;overflow:visible;border:1px solid rgba(168,85,247,0.1);cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative}
     .card:hover{transform:scale(1.05);border-color:#a855f7;box-shadow:0 8px 30px rgba(168,85,247,0.25)}
-    .poster{width:100%;height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .poster{width:100%;height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;border-radius:10px 10px 0 0}
     .poster-bg{position:absolute;inset:0;background:var(--grad)}
     .poster-icon{font-size:2.8rem;z-index:1;margin-bottom:.5rem}
     .poster-initial{font-size:4rem;font-weight:900;z-index:1;color:rgba(255,255,255,0.1);position:absolute;bottom:-.5rem;right:.5rem;line-height:1}
@@ -53,6 +53,15 @@
     .card-title{font-size:.83rem;font-weight:600;color:#e8e4f0;margin-bottom:.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .card-meta{font-size:.72rem;color:#7c6fa0;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
     .badge{background:rgba(168,85,247,0.15);color:#c084fc;padding:.1rem .35rem;border-radius:3px;font-size:.68rem;font-weight:600}
+    .react-bar{display:flex;align-items:center;justify-content:space-between;padding:.4rem .75rem .6rem;border-top:1px solid rgba(168,85,247,0.08);position:relative}
+    .reactions-display{display:flex;gap:.25rem;flex-wrap:wrap;font-size:.85rem}
+    .reaction-chip{background:rgba(168,85,247,0.12);border-radius:20px;padding:.1rem .4rem;font-size:.78rem;display:flex;align-items:center;gap:.2rem;color:#c084fc}
+    .react-btn{background:rgba(168,85,247,0.12);border:none;border-radius:6px;padding:.25rem .45rem;cursor:pointer;font-size:.9rem;color:#a855f7;transition:background .2s;position:relative;z-index:10}
+    .react-btn:hover{background:rgba(168,85,247,0.25)}
+    .emoji-picker{position:absolute;bottom:2.2rem;right:.5rem;background:#1e1730;border:1px solid rgba(168,85,247,0.3);border-radius:10px;padding:.5rem;display:flex;gap:.3rem;box-shadow:0 8px 24px rgba(0,0,0,0.5);z-index:200;display:none}
+    .emoji-picker.open{display:flex}
+    .emoji-opt{background:none;border:none;font-size:1.3rem;cursor:pointer;padding:.2rem .3rem;border-radius:6px;transition:background .15s}
+    .emoji-opt:hover{background:rgba(168,85,247,0.2)}
     .empty{color:#4a3f6b;padding:2rem 0;font-size:.95rem}
     footer{text-align:center;padding:2rem;color:#3a2f5a;font-size:.78rem;border-top:1px solid rgba(168,85,247,0.07)}
   </style>
@@ -83,26 +92,13 @@
   <div class="main">
     <div class="sidebar">
       <h3>Browse by Region</h3>
-      <button class="region-btn active" data-region="all" onclick="filterRegion(this,'all')">
-        <span class="region-flag">&#127758;</span> All Regions
-      </button>
-      <button class="region-btn" data-region="USA" onclick="filterRegion(this,'USA')">
-        <span class="region-flag">&#127482;&#127480;</span> USA
-      </button>
-      <button class="region-btn" data-region="South America" onclick="filterRegion(this,'South America')">
-        <span class="region-flag">&#127463;&#127479;</span> South America
-      </button>
-      <button class="region-btn" data-region="India" onclick="filterRegion(this,'India')">
-        <span class="region-flag">&#127470;&#127475;</span> India
-      </button>
-      <button class="region-btn" data-region="Asia" onclick="filterRegion(this,'Asia')">
-        <span class="region-flag">&#127471;&#127477;</span> Asia
-      </button>
-      <button class="region-btn" data-region="Europe" onclick="filterRegion(this,'Europe')">
-        <span class="region-flag">&#127466;&#127482;</span> Europe
-      </button>
+      <button class="region-btn active" onclick="filterRegion(this,'all')"><span class="region-flag">&#127758;</span> All Regions</button>
+      <button class="region-btn" onclick="filterRegion(this,'USA')"><span class="region-flag">&#127482;&#127480;</span> USA</button>
+      <button class="region-btn" onclick="filterRegion(this,'South America')"><span class="region-flag">&#127463;&#127479;</span> South America</button>
+      <button class="region-btn" onclick="filterRegion(this,'India')"><span class="region-flag">&#127470;&#127475;</span> India</button>
+      <button class="region-btn" onclick="filterRegion(this,'Asia')"><span class="region-flag">&#127471;&#127477;</span> Asia</button>
+      <button class="region-btn" onclick="filterRegion(this,'Europe')"><span class="region-flag">&#127466;&#127482;</span> Europe</button>
     </div>
-
     <div class="content" id="content">
       <p style="color:#6b5fa0;padding:2rem 0">Loading films...</p>
     </div>
@@ -124,8 +120,52 @@
       "linear-gradient(135deg,#1a1500,#a16207)"
     ];
     var ICONS = ["&#127849;","&#127756;","&#9876;","&#127775;","&#127916;","&#128081;","&#127754;"];
+    var EMOJIS = ["\uD83D\uDD25","\u2764\uFE0F","\uD83D\uDE02","\uD83D\uDE31","\uD83D\uDC4F","\uD83E\uDD29"];
     var allVideos = [];
-    var currentRegion = "all";
+    var reactionsCache = {};
+
+    function closeAllPickers() {
+      document.querySelectorAll(".emoji-picker.open").forEach(function(p){ p.classList.remove("open"); });
+    }
+
+    document.addEventListener("click", function(e){
+      if (!e.target.closest(".react-btn") && !e.target.closest(".emoji-picker")) closeAllPickers();
+    });
+
+    function togglePicker(e, videoID) {
+      e.stopPropagation();
+      var picker = document.getElementById("picker-" + videoID);
+      var isOpen = picker.classList.contains("open");
+      closeAllPickers();
+      if (!isOpen) picker.classList.add("open");
+    }
+
+    function sendReaction(e, videoID, emoji) {
+      e.stopPropagation();
+      closeAllPickers();
+      fetch(API + "/reactions", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ videoID: videoID, emoji: emoji })
+      })
+      .then(function(){ loadReactions(videoID); })
+      .catch(function(err){ console.error(err); });
+    }
+
+    function loadReactions(videoID) {
+      fetch(API + "/reactions?videoID=" + encodeURIComponent(videoID))
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          reactionsCache[videoID] = data;
+          var display = document.getElementById("rdisplay-" + videoID);
+          if (!display) return;
+          if (!data.length) { display.innerHTML = ""; return; }
+          display.innerHTML = data.map(function(r){
+            return '<span class="reaction-chip">'+r.emoji+' <span>'+r.count+'</span></span>';
+          }).join('');
+        })
+        .catch(function(){});
+    }
 
     function makeCard(v, i) {
       var grad = GRADS[i % GRADS.length];
@@ -133,60 +173,63 @@
       var initial = v.title ? v.title[0].toUpperCase() : "L";
       var year = v.year || "";
       var genre = v.genre || "";
-      return '<div class="card" onclick="location.href=\'/player.html?key='+encodeURIComponent(v.s3Key)+'&title='+encodeURIComponent(v.title)+'\'">'
-        +'<div class="poster" style="--grad:'+grad+'">'
+      var vid = v.videoID || v.videoId || "";
+      var pickerEmojis = EMOJIS.map(function(em){
+        return '<button class="emoji-opt" onclick="sendReaction(event,\''+vid+'\',\''+em+'\')">'+em+'</button>';
+      }).join('');
+      return '<div class="card">'
+        +'<div class="poster" style="--grad:'+grad+'" onclick="location.href=\'/player.html?key='+encodeURIComponent(v.s3Key)+'&title='+encodeURIComponent(v.title)+'\'">'
         +'<div class="poster-bg"></div>'
         +'<div class="poster-icon">'+icon+'</div>'
         +'<div class="poster-initial">'+initial+'</div>'
         +'<div class="play-overlay"><div class="play-circle">&#9654;</div></div>'
         +'</div>'
-        +'<div class="card-info">'
+        +'<div class="card-info" onclick="location.href=\'/player.html?key='+encodeURIComponent(v.s3Key)+'&title='+encodeURIComponent(v.title)+'\'">'
         +'<div class="card-title">'+v.title+'</div>'
         +'<div class="card-meta">'+(year?'<span>'+year+'</span>':'')+(genre?'<span class="badge">'+genre+'</span>':'')+'</div>'
-        +'</div></div>';
+        +'</div>'
+        +'<div class="react-bar">'
+        +'<div class="reactions-display" id="rdisplay-'+vid+'"></div>'
+        +'<button class="react-btn" onclick="togglePicker(event,\''+vid+'\')">&#128515; +</button>'
+        +'<div class="emoji-picker" id="picker-'+vid+'">'+pickerEmojis+'</div>'
+        +'</div>'
+        +'</div>';
     }
 
     function renderContent(region) {
       var content = document.getElementById("content");
       var filtered = region === "all" ? allVideos : allVideos.filter(function(v){ return v.region === region; });
-      if (!filtered.length) {
-        content.innerHTML = '<p class="empty">No films found for this region.</p>';
-        return;
-      }
+      if (!filtered.length) { content.innerHTML = '<p class="empty">No films found.</p>'; return; }
+      var flags = {"USA":"&#127482;&#127480;","South America":"&#127463;&#127479;","India":"&#127470;&#127475;","Asia":"&#127471;&#127477;","Europe":"&#127466;&#127482;"};
+      var html = "";
       if (region === "all") {
-        var regions = ["USA","South America","India","Asia","Europe"];
-        var html = "";
-        regions.forEach(function(r) {
+        ["USA","South America","India","Asia","Europe"].forEach(function(r){
           var group = allVideos.filter(function(v){ return v.region === r; });
           if (!group.length) return;
-          var flags = {"USA":"&#127482;&#127480;","South America":"&#127463;&#127479;","India":"&#127470;&#127475;","Asia":"&#127471;&#127477;","Europe":"&#127466;&#127482;"};
           html += '<div class="section-header"><span class="section-title">'+(flags[r]||"")+" "+r+'</span><span class="section-count">'+group.length+' films</span></div>';
           html += '<div class="row">'+group.map(makeCard).join('')+'</div>';
         });
-        content.innerHTML = html || '<p class="empty">No films yet.</p>';
       } else {
-        var flags2 = {"USA":"&#127482;&#127480;","South America":"&#127463;&#127479;","India":"&#127470;&#127475;","Asia":"&#127471;&#127477;","Europe":"&#127466;&#127482;"};
-        content.innerHTML = '<div class="section-header"><span class="section-title">'+(flags2[region]||"")+" "+region+'</span><span class="section-count">'+filtered.length+' films</span></div>'
+        html = '<div class="section-header"><span class="section-title">'+(flags[region]||"")+" "+region+'</span><span class="section-count">'+filtered.length+' films</span></div>'
           +'<div class="row">'+filtered.map(makeCard).join('')+'</div>';
       }
+      content.innerHTML = html || '<p class="empty">No films yet.</p>';
+      filtered.forEach(function(v){
+        var vid = v.videoID || v.videoId || "";
+        if (vid) loadReactions(vid);
+      });
     }
 
     function filterRegion(btn, region) {
       document.querySelectorAll(".region-btn").forEach(function(b){ b.classList.remove("active"); });
       btn.classList.add("active");
-      currentRegion = region;
       renderContent(region);
     }
 
     fetch(API + "/videos")
       .then(function(r){ return r.json(); })
-      .then(function(videos){
-        allVideos = videos;
-        renderContent("all");
-      })
-      .catch(function(){
-        document.getElementById("content").innerHTML = '<p style="color:#f87171">Could not load films.</p>';
-      });
+      .then(function(videos){ allVideos = videos; renderContent("all"); })
+      .catch(function(){ document.getElementById("content").innerHTML = '<p style="color:#f87171">Could not load films.</p>'; });
   </script>
 </body>
 </html>
